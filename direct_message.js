@@ -5,7 +5,7 @@ var Client = require('instagram-private-api').V1;
 
 Promise.promisifyAll(fs);
 
-var config = {}
+var config = {};
 var followers = {};
 var excludes = {};
 

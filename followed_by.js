@@ -24,7 +24,6 @@ fs.readFileAsync('config.json', 'utf-8')
     config.accountId = accountId;
 })
 .then(function() {
-    var count = 0;
     return new Promise(function(resolve, reject) {
         var feed = new Client.Feed.AccountFollowers(config.session, config.accountId);
         var fetchFollowers = function() {
@@ -33,8 +32,7 @@ fs.readFileAsync('config.json', 'utf-8')
                 _.each(accounts, function(account) {
                     followers[account.id] = account._params.username;
                 });
-                count = count + 1;
-                if (feed.isMoreAvailable() && count < 3) {
+                if (feed.isMoreAvailable()) {
                     fetchFollowers();
                 }
                 else {

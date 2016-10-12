@@ -7,11 +7,12 @@ fs.readFile('config.json', 'utf8', function (err,data) {
     if (err) {
         return console.log(err);
     }
-    
+
     var json = JSON.parse(data);
     var username = json.username;
     var password = json.password;
     var devicename = json.device;
+    var followersfile = json.followers;
 
     var device = new Client.Device(devicename);
     var storage = new Client.CookieFileStorage(__dirname + '/cookies/' + devicename + '.json');
@@ -43,7 +44,7 @@ fs.readFile('config.json', 'utf8', function (err,data) {
             });
         })
         .then(function(followers) {
-            fs.writeFile('followers.json', JSON.stringify(followers), function(err) {
+            fs.writeFile(followersfile, JSON.stringify(followers), function(err) {
                 if(err) {
                     return console.log(err);
                 }

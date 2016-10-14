@@ -2,6 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Promise = require('bluebird');
 var Client = require('instagram-private-api').V1;
+const winston = require('winston');
 
 Promise.promisifyAll(fs);
 
@@ -48,8 +49,10 @@ fs.readFileAsync('config.json', 'utf-8')
     return new Promise(function(resolve, reject) {
         var sendText = function(recipients_users, text) {
             var userList = _.first(recipients_users, NUM_RECIPIENTS)
-            var text = Client.Thread.configureText(config.session, userList, text);
-            return text.delay(1000).then(function(results) {
+            //var text = Client.Thread.configureText(config.session, userList, text);
+            //return text.delay(1000).then(function(results) {
+            return Promise.delay(1000).then(function(results) {
+                winston.log('debug', 'text: \"', text, '\"sent to recipients:\"', results, '\"');
                 var nextuserList = _.rest(userList, NUM_RECIPIENTS)
                 if (nextuserList.length > 0) {
                     sendText(nextuserList, text);

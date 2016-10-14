@@ -12,6 +12,13 @@
 "password":"<password>"}
 ~~~~
 
+### messages.json format
+
+~~~~
+[{"text":"<text1>","mediaId":1234},{"text":"<text2>","mediaId
+:5678},...,{"text":"<textN>","mediaId":9876}]
+~~~~
+
 ### Dependencies
 
 * npm install --save winston

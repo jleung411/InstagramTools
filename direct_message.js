@@ -53,25 +53,39 @@ fs.readFileAsync('config.json', 'utf-8')
 .then(function () {
     var recipients = _.without.apply(_, [followers].concat(excludes));
     return new Promise(function(resolve, reject) {
-        var sendText = function(recipients_users, text) {
+        var sendMessage = function(recipients_users, message) {
             var userList = _.first(recipients_users, NUM_RECIPIENTS)
-            return Client.Thread.configureText(config.session, userList, text).delay(3000).then(function(results) {
-                logger.log('debug', '\"', text, '\" sent to', userList);
-                var nextuserList = _.rest(recipients_users, NUM_RECIPIENTS)
-                if (nextuserList.length > 0) {
-                    sendText(nextuserList, text);
-                }
-                else {
-                    return;
-                }
-            });
+            if (message.mediaId) {
+                return Client.Thread.configureMediaShare(config.session, userList, message.mediaId, message.text).delay(3000).then(function(results) {
+                    logger.log('debug', 'mediaId: ', message.mediaId, ' and \"', message.text, '\" sent to', userList);
+                    var nextuserList = _.rest(recipients_users, NUM_RECIPIENTS)
+                    if (nextuserList.length > 0) {
+                        sendMessage(nextuserList, message);
+                    }
+                    else {
+                        return;
+                    }
+                });
+            }
+            else {
+                return Client.Thread.configureText(config.session, userList, message.text).delay(3000).then(function(results) {
+                    logger.log('debug', '\"', message.text, '\" sent to', userList);
+                    var nextuserList = _.rest(recipients_users, NUM_RECIPIENTS)
+                    if (nextuserList.length > 0) {
+                        sendMessage(nextuserList, message);
+                    }
+                    else {
+                        return;
+                    }
+                });
+            }
         };
         var testRecipients = [346074560, 12945252, 1751651899, 12945252, 346074560,
                             346074560, 12945252, 1751651899, 12945252, 346074560,
                             346074560, 12945252, 1751651899, 12945252, 346074560,
                             346074560, 12945252, 1751651899, 12945252, 346074560,
                             346074560, 12945252, 1751651899, 12945252, 346074560]
-        _.each(messages, function (message) { sendText(testRecipients, message.text); });
+        _.each(messages, function (message) { sendMessage(testRecipients, message); });
     });
 })
 .then(function (thread) {

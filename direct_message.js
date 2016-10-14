@@ -3,6 +3,11 @@ var _ = require('underscore');
 var Promise = require('bluebird');
 var Client = require('instagram-private-api').V1;
 const winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)({'timestamp':true})
+    ]
+});
 
 Promise.promisifyAll(fs);
 
@@ -18,6 +23,7 @@ fs.readFileAsync('config.json', 'utf-8')
 .then(JSON.parse)
 .then(function (json) {
     config = json;
+    logger.level = config.log_level;
     return fs.readFileAsync(config.messages, 'utf-8');
 })
 .then(JSON.parse)
@@ -49,11 +55,10 @@ fs.readFileAsync('config.json', 'utf-8')
     return new Promise(function(resolve, reject) {
         var sendText = function(recipients_users, text) {
             var userList = _.first(recipients_users, NUM_RECIPIENTS)
-            //var text = Client.Thread.configureText(config.session, userList, text);
-            //return text.delay(1000).then(function(results) {
-            return Promise.delay(1000).then(function(results) {
-                winston.log('debug', 'text: \"', text, '\"sent to recipients:\"', results, '\"');
-                var nextuserList = _.rest(userList, NUM_RECIPIENTS)
+            var text = Client.Thread.configureText(config.session, userList, text);
+            return text.delay(1000).then(function(results) {
+                logger.log('debug', '\"', text, '\" sent to', userList);
+                var nextuserList = _.rest(recipients_users, NUM_RECIPIENTS)
                 if (nextuserList.length > 0) {
                     sendText(nextuserList, text);
                 }
@@ -62,7 +67,11 @@ fs.readFileAsync('config.json', 'utf-8')
                 }
             });
         };
-        var testRecipients = [346074560, 346074560, 346074560]
+        var testRecipients = [346074560, 346074560, 346074560, 346074560, 346074560,
+                            346074560, 346074560, 346074560, 346074560, 346074560,
+                            346074560, 346074560, 346074560, 346074560, 346074560,
+                            346074560, 346074560, 346074560, 346074560, 346074560,
+                            346074560, 346074560, 346074560, 346074560, 346074560]
         _.each(messages, function (message) { sendText(testRecipients, message.text); });
     });
 })

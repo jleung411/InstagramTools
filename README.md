@@ -1,7 +1,8 @@
 # InstagramTools
 
-config.json file format:
+### config.json format
 
+~~~~
 {"log_level":"debug",
 "device":"<device_name>",
 "followers":"followers.json",
@@ -9,8 +10,10 @@ config.json file format:
 "messages":"messages.json",
 "username":"<username>",
 "password":"<password>"}
+~~~~
 
+### Dependencies
 
-npm install --save winston
-npm install --save bluebird
-npm install --save instagram-private-api
+* npm install --save winston
+* npm install --save bluebird
+* npm install --save instagram-private-api

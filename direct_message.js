@@ -55,8 +55,7 @@ fs.readFileAsync('config.json', 'utf-8')
     return new Promise(function(resolve, reject) {
         var sendText = function(recipients_users, text) {
             var userList = _.first(recipients_users, NUM_RECIPIENTS)
-            var text = Client.Thread.configureText(config.session, userList, text);
-            return text.delay(1000).then(function(results) {
+            return Client.Thread.configureText(config.session, userList, text).delay(3000).then(function(results) {
                 logger.log('debug', '\"', text, '\" sent to', userList);
                 var nextuserList = _.rest(recipients_users, NUM_RECIPIENTS)
                 if (nextuserList.length > 0) {
@@ -67,11 +66,11 @@ fs.readFileAsync('config.json', 'utf-8')
                 }
             });
         };
-        var testRecipients = [346074560, 346074560, 346074560, 346074560, 346074560,
-                            346074560, 346074560, 346074560, 346074560, 346074560,
-                            346074560, 346074560, 346074560, 346074560, 346074560,
-                            346074560, 346074560, 346074560, 346074560, 346074560,
-                            346074560, 346074560, 346074560, 346074560, 346074560]
+        var testRecipients = [346074560, 12945252, 1751651899, 12945252, 346074560,
+                            346074560, 12945252, 1751651899, 12945252, 346074560,
+                            346074560, 12945252, 1751651899, 12945252, 346074560,
+                            346074560, 12945252, 1751651899, 12945252, 346074560,
+                            346074560, 12945252, 1751651899, 12945252, 346074560]
         _.each(messages, function (message) { sendText(testRecipients, message.text); });
     });
 })

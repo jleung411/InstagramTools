@@ -15,8 +15,8 @@
 ### messages.json format
 
 ~~~~
-[{"text":"<text1>","mediaId":1234},{"text":"<text2>","mediaId
-:5678},...,{"text":"<textN>","mediaId":9876}]
+[{"text":"<text1>","mediaId":mediaId1},{"text":"<text2>","mediaId
+:mediaId2},...,{"text":"<textN>","mediaId":mediaIdN}]
 ~~~~
 
 ### Dependencies
